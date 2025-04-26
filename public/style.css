@@ -1,0 +1,10 @@
+body {
+    background-color: #f8f9fa;
+}
+
+#maze-output {
+    text-align: center;
+    font-family: monospace;
+    white-space: pre;
+    margin-top: 20px;
+}
