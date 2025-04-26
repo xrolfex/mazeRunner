@@ -52,12 +52,19 @@
             <button id="generate-button" class="btn btn-primary">Generate Maze</button>
             <button id="solve-button" class="btn btn-success" style="display: none;">Solve Maze</button>
             <button id="stop-button" class="btn btn-danger" style="display: none;">Stop</button>
+            <button id="view-3d-button" class="btn btn-secondary" style="display: none;">View in 3D</button>
         </div>
         <div class="text-center mt-4">
             <canvas id="maze-canvas" width="500" height="500" style="border:1px solid #000;"></canvas>
         </div>
+        <div id="maze3d-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(20,20,30,0.98); z-index:9999; align-items:center; justify-content:center;">
+            <button id="close-3d-btn" style="position:absolute;top:20px;right:30px;z-index:10000;font-size:2rem;background:#222;color:#fff;border:none;border-radius:8px;padding:0 16px;cursor:pointer;">&times;</button>
+            <div id="maze-3d-container" style="width: 90vw; height: 90vh; margin:auto;"></div>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+    <script src="/maze3d.js"></script>
     <script>
         let animationTimeouts = [];
         let generatedMaze = null;
@@ -97,6 +104,8 @@
 
                 // Show the solve button after generation
                 document.getElementById('solve-button').style.display = 'block';
+                // Show the 3D button after generation
+                document.getElementById('view-3d-button').style.display = 'block';
             } catch (error) {
                 alert(error.message);
             }
@@ -132,6 +141,32 @@
                 alert(error.message);
             }
         });
+
+        document.getElementById('view-3d-button').addEventListener('click', () => {
+            if (!generatedMaze) {
+                alert('Maze not generated yet!');
+                return;
+            }
+            // Show modal overlay and render 3D maze
+            const modal = document.getElementById('maze3d-modal');
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            renderMaze3D(generatedMaze, startPoint, endPoint);
+        });
+        document.getElementById('close-3d-btn').addEventListener('click', close3DModal);
+        document.addEventListener('keydown', function(e) {
+            if (document.getElementById('maze3d-modal').style.display === 'flex' && e.key === 'Escape') {
+                close3DModal();
+            }
+        });
+        function close3DModal() {
+            const modal = document.getElementById('maze3d-modal');
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+            // Clean up 3D renderer and listeners
+            if (window.disposeMaze3D) window.disposeMaze3D();
+            document.getElementById('maze-3d-container').innerHTML = '';
+        }
 
         function animateMaze(maze, steps, size, speed, start, end) {
             const canvas = document.getElementById('maze-canvas');
@@ -196,6 +231,27 @@
             animationTimeouts.forEach(timeout => clearTimeout(timeout));
             animationTimeouts = [];
 
+            // Instantly draw the rest of the maze
+            if (generatedMaze) {
+                const canvas = document.getElementById('maze-canvas');
+                const ctx = canvas.getContext('2d');
+                const size = generatedMaze.length;
+                const cellSize = canvas.width / size;
+                // Draw all maze cells
+                ctx.fillStyle = 'white';
+                for (let x = 0; x < size; x++) {
+                    for (let y = 0; y < size; y++) {
+                        if (generatedMaze[x][y] === 0) {
+                            ctx.fillRect(y * cellSize, x * cellSize, cellSize, cellSize);
+                        }
+                    }
+                }
+                // Redraw the start and end points
+                ctx.fillStyle = 'green';
+                ctx.fillRect(startPoint[1] * cellSize, startPoint[0] * cellSize, cellSize, cellSize);
+                ctx.fillStyle = 'red';
+                ctx.fillRect(endPoint[1] * cellSize, endPoint[0] * cellSize, cellSize, cellSize);
+            }
             // Hide the stop button
             document.getElementById('stop-button').style.display = 'none';
         }

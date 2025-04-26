@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Maze 3D View</title>
+    <style>
+        html, body { margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; background: #222; }
+        #maze-3d-container { width: 100vw; height: 100vh; }
+    </style>
+</head>
+<body>
+    <div id="maze-3d-container"></div>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+    <script src="/maze3d.js"></script>
+    <script>
+    // Listen for maze data from the opener
+    window.addEventListener('message', (event) => {
+        if (event.data && event.data.type === 'maze-data') {
+            renderMaze3D(event.data.maze, event.data.start, event.data.end);
+        }
+    }, { once: true });
+    // Optionally, notify opener that popup is ready
+    if (window.opener) window.opener.postMessage({ type: 'maze3d-ready' }, '*');
+    </script>
+</body>
+</html>
