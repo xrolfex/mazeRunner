@@ -30,7 +30,7 @@
  *   start: Start cell coordinates
  *   end: End cell coordinates
  */
-module.exports = function generateMazeKruskal(size) {
+function generateMazeKruskal(size) {
     // Create a size x size grid filled with walls (1)
     const maze = Array.from({ length: size }, () => Array(size).fill(1));
     const edges = [];
@@ -121,6 +121,21 @@ module.exports = function generateMazeKruskal(size) {
 
     // Set start and end points
     const start = [1, 1];
+    let end = selectKruskalEndCell(maze, size);
+    maze[start[0]][start[1]] = 0;
+    maze[end[0]][end[1]] = 0;
+    steps.push(start, end);
+    return { maze, steps, start, end };
+}
+
+/**
+ * Selects the end cell for the maze based on open border cells.
+ * Exposed for testing to allow full coverage.
+ * @param {number[][]} maze
+ * @param {number} size
+ * @returns {number[]} end cell coordinates
+ */
+function selectKruskalEndCell(maze, size) {
     let end = [size - 2, size - 2];
     if (size > 2 && maze[size - 3][size - 2] === 0) {
         end = [size - 3, size - 2];
@@ -129,8 +144,8 @@ module.exports = function generateMazeKruskal(size) {
     } else if (size > 2 && maze[size - 3][size - 3] === 0) {
         end = [size - 3, size - 3];
     }
-    maze[start[0]][start[1]] = 0;
-    maze[end[0]][end[1]] = 0;
-    steps.push(start, end);
-    return { maze, steps, start, end };
+    return end;
 }
+
+module.exports = generateMazeKruskal;
+module.exports.selectKruskalEndCell = selectKruskalEndCell;

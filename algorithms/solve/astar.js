@@ -14,6 +14,29 @@
  */
 
 /**
+ * Priority Queue implementation for A* Search.
+ */
+class PriorityQueue {
+    constructor(comparator = (a, b) => a - b) {
+        this.data = [];
+        this.comparator = comparator;
+    }
+
+    push(item) {
+        this.data.push(item);
+        this.data.sort(this.comparator);
+    }
+
+    pop() {
+        return this.data.shift();
+    }
+
+    get length() {
+        return this.data.length;
+    }
+}
+
+/**
  * Solves a maze using A* Search algorithm.
  *
  * @param {number[][]} maze - 2D maze array (0=open, 1=wall)
@@ -22,7 +45,8 @@
  * @returns {number[][]} solutionSteps - Array of [x, y] steps from start to end (if found)
  */
 module.exports = function solveMazeAStar(maze, start, end) {
-    const openSet = [start];
+    // Use PriorityQueue for efficient open set
+    const openSet = new PriorityQueue((a, b) => fScore.get(key(a)) - fScore.get(key(b)));
     const cameFrom = new Map();
     const gScore = new Map();
     const fScore = new Map();
@@ -41,9 +65,10 @@ module.exports = function solveMazeAStar(maze, start, end) {
     gScore.set(key(start), 0);
     fScore.set(key(start), heuristic(start[0], start[1]));
 
+    openSet.push(start);
+
     while (openSet.length > 0) {
-        openSet.sort((a, b) => fScore.get(key(a)) - fScore.get(key(b)));
-        const current = openSet.shift();
+        const current = openSet.pop();
         const [x, y] = current;
         solutionSteps.push([x, y]);
 
@@ -64,7 +89,7 @@ module.exports = function solveMazeAStar(maze, start, end) {
                     gScore.set(neighborKey, tentativeGScore);
                     fScore.set(neighborKey, tentativeGScore + heuristic(nx, ny));
 
-                    if (!openSet.some(([ox, oy]) => ox === nx && oy === ny)) {
+                    if (!openSet.data.some(([ox, oy]) => ox === nx && oy === ny)) {
                         openSet.push([nx, ny]);
                     }
                 }

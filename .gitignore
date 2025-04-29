@@ -25,6 +25,11 @@ Thumbs.db
 
 # Coverage
 coverage/
+/coverage/
+/jest-test-results.json
+
+# Test directory
+# /tests/   <-- Removed so tests are tracked by git
 
 # Misc
 *.swp
@@ -36,5 +41,4 @@ coverage/
 # Ignore test output
 /test-output/
 
-# Ignore Jupyter notebooks checkpoints
-.ipynb_checkpoints/
+/.ipynb_checkpoints/

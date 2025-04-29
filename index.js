@@ -1,3 +1,5 @@
+/* global __dirname */
+
 /**
  * index.js
  *
@@ -78,25 +80,30 @@ app.post('/generate-maze', (req, res) => {
 app.post('/solve-maze', (req, res) => {
     const { maze, start, end, algorithm } = req.body;
     let solutionSteps;
-
-    switch (algorithm) {
-        case 'dfs':
-            solutionSteps = MazeGenerator.solveMazeDFS(maze, start, end);
-            break;
-        case 'bfs':
-            solutionSteps = MazeGenerator.solveMazeBFS(maze, start, end);
-            break;
-        case 'astar':
-            solutionSteps = MazeGenerator.solveMazeAStar(maze, start, end);
-            break;
-        default:
-            throw new Error('Unknown solving algorithm');
+    try {
+        switch (algorithm) {
+            case 'dfs':
+                solutionSteps = MazeGenerator.solveMazeDFS(maze, start, end);
+                break;
+            case 'bfs':
+                solutionSteps = MazeGenerator.solveMazeBFS(maze, start, end);
+                break;
+            case 'astar':
+                solutionSteps = MazeGenerator.solveMazeAStar(maze, start, end);
+                break;
+            default:
+                throw new Error('Unknown solving algorithm');
+        }
+        res.json({ solutionSteps });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
     }
-
-    res.json({ solutionSteps }); // Return only the solution steps
 });
 
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+// Export app for testing
+module.exports = app;

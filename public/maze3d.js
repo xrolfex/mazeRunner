@@ -1,3 +1,4 @@
+/* global THREE, close3DModal */
 /**
  * maze3d.js
  *
@@ -22,9 +23,10 @@ let camera, scene, renderer, mazeGroup;
 let player = { x: 0, y: 0, tx: 0, ty: 0, moving: false };
 let mazeData, start, end;
 let cellSize = 5;
-let moveSpeed = 0.15; // smaller = slower
+// Remove unused variables for lint compliance
+// let moveSpeed = 0.15; // smaller = slower
 let moveLerp = 0.12; // interpolation factor
-let moveQueue = [];
+// let moveQueue = [];
 let yaw = 0, pitch = 0;
 let isPointerLocked = false;
 let animationId = null;
@@ -47,7 +49,7 @@ function renderMaze3D(maze, startPoint, endPoint) {
     player.x = player.tx = start[1];
     player.y = player.ty = start[0];
     player.moving = false;
-    moveQueue = [];
+    // moveQueue = [];
     yaw = 0;
     pitch = 0;
     isPointerLocked = false;
@@ -269,7 +271,7 @@ function handleMovementAndLook() {
         } else if (canMove(player.tx, player.ty + dy)) {
             player.ty += dy; // Slide along Y
         }
-        moveQueue = [[player.tx, player.ty]];
+        // moveQueue = [[player.tx, player.ty]];
         // Check for finish
         if (Math.round(player.tx) === end[1] && Math.round(player.ty) === end[0]) {
             showFinishPopup();
