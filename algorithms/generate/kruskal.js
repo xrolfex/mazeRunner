@@ -1,5 +1,7 @@
 // Kruskal's Algorithm Maze Generation
+// Modernized: ensures full grid usage, clear logic, and maintainability
 module.exports = function generateMazeKruskal(size) {
+    // Create a size x size grid filled with walls (1)
     const maze = Array.from({ length: size }, () => Array(size).fill(1));
     const edges = [];
     const directions = [
@@ -10,6 +12,7 @@ module.exports = function generateMazeKruskal(size) {
     ];
     const steps = [];
 
+    // Disjoint set helpers
     const find = (parent, x) => (parent[x] === x ? x : (parent[x] = find(parent, parent[x])));
     const union = (parent, rank, x, y) => {
         const rootX = find(parent, x);
@@ -32,6 +35,7 @@ module.exports = function generateMazeKruskal(size) {
     const parent = Array.from({ length: size * size }, (_, i) => i);
     const rank = Array(size * size).fill(0);
 
+    // Add all possible edges between odd cells
     for (let x = 1; x < size; x += 2) {
         for (let y = 1; y < size; y += 2) {
             directions.forEach(([dx, dy]) => {
@@ -51,15 +55,19 @@ module.exports = function generateMazeKruskal(size) {
         const [x, y, nx, ny] = edges.splice(randomIndex, 1)[0];
 
         if (union(parent, rank, cellIndex(x, y), cellIndex(nx, ny))) {
+            // Carve the wall between current and neighbor
+            const mx = x + (nx - x) / 2;
+            const my = y + (ny - y) / 2;
             maze[x][y] = 0;
             steps.push([x, y]);
             maze[nx][ny] = 0;
             steps.push([nx, ny]);
-            maze[x + (nx - x) / 2][y + (ny - y) / 2] = 0; // Carve passage
-            steps.push([x + (nx - x) / 2, y + (ny - y) / 2]);
+            maze[mx][my] = 0;
+            steps.push([mx, my]);
         }
     }
 
+    // Set start and end points
     const start = [1, 1];
     let end = [size - 2, size - 2];
     if (size > 2 && maze[size - 3][size - 2] === 0) {

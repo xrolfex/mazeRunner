@@ -1,10 +1,23 @@
-/* Modern, streamlined UI for MazeRunner */
+/* Modern, glassmorphism, and minimal UI for MazeRunner */
+/* Fifth Third Bank Brand Colors */
+:root {
+    --ftb-blue: #003366;
+    --ftb-green: #00A54F;
+    --ftb-yellow: #FFD100;
+    --ftb-navy: #002554;
+    --ftb-dark: #001B34;
+    --ftb-white: #FFFFFF;
+    --ftb-gray: #F5F6FA;
+    --ftb-light-gray: #E5E8EC;
+}
+
 body {
-    background: linear-gradient(135deg, #232526 0%, #414345 100%);
+    background: linear-gradient(135deg, var(--ftb-navy) 0%, var(--ftb-blue) 100%);
     min-height: 100vh;
     font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
-    color: #f5f6fa;
+    color: var(--ftb-gray);
     margin: 0;
+    letter-spacing: 0.01em;
 }
 
 #maze-output {
@@ -15,116 +28,203 @@ body {
 }
 
 .container {
-    background: rgba(34, 36, 40, 0.95);
-    border-radius: 18px;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    background: rgba(0, 51, 102, 0.75); /* ftb-blue glassmorphism */
+    border-radius: 24px;
+    box-shadow: 0 8px 32px 0 rgba(0, 51, 102, 0.18), 0 1.5px 8px 0 rgba(0,0,0,0.10);
     padding: 2.5rem 2rem 2rem 2rem;
     margin-top: 3rem;
     margin-bottom: 3rem;
     max-width: 900px;
+    backdrop-filter: blur(16px) saturate(180%);
+    border: 1.5px solid var(--ftb-light-gray);
+    transition: box-shadow 0.2s;
 }
 
 h2 {
     font-weight: 700;
     letter-spacing: 0.02em;
     margin-bottom: 1.2rem;
-    color: #00b894;
+    color: var(--ftb-green);
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
 }
 
 label, .form-label {
-    color: #b2bec3;
+    color: var(--ftb-light-gray);
     font-weight: 500;
+    font-size: 1.08rem;
 }
 
 .form-control, .form-select {
-    background: #232526;
-    color: #f5f6fa;
-    border: 1px solid #636e72;
-    border-radius: 8px;
-    padding: 0.7rem 1rem;
+    background: rgba(0, 27, 52, 0.85);
+    color: var(--ftb-white);
+    border: 1.5px solid var(--ftb-blue);
+    border-radius: 12px;
+    padding: 0.8rem 1.1rem;
     margin-bottom: 0.5rem;
-    transition: border 0.2s;
+    font-size: 1.08rem;
+    transition: border 0.2s, box-shadow 0.2s;
+    box-shadow: 0 1px 4px 0 rgba(0,0,0,0.04);
 }
 .form-control:focus, .form-select:focus {
-    border-color: #00b894;
+    border-color: var(--ftb-green);
     outline: none;
+    box-shadow: 0 0 0 2px #00A54F33;
 }
 
 .btn {
-    border-radius: 8px;
+    border-radius: 12px;
     font-weight: 600;
     letter-spacing: 0.03em;
-    padding: 0.7rem 2.2rem;
-    font-size: 1.1rem;
-    transition: background 0.2s, color 0.2s;
+    padding: 0.8rem 2.3rem;
+    font-size: 1.13rem;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.10);
+    border: none;
 }
 .btn-primary {
-    background: linear-gradient(90deg, #00b894 0%, #00cec9 100%);
-    border: none;
-    color: #fff;
+    background: linear-gradient(90deg, var(--ftb-blue) 0%, var(--ftb-green) 100%);
+    color: var(--ftb-white);
 }
 .btn-primary:hover {
-    background: linear-gradient(90deg, #00cec9 0%, #00b894 100%);
+    background: linear-gradient(90deg, var(--ftb-green) 0%, var(--ftb-blue) 100%);
+    box-shadow: 0 4px 16px 0 #00336644;
 }
 .btn-success {
-    background: linear-gradient(90deg, #0984e3 0%, #00b894 100%);
-    border: none;
-    color: #fff;
+    background: linear-gradient(90deg, var(--ftb-green) 0%, var(--ftb-yellow) 100%);
+    color: var(--ftb-dark);
 }
 .btn-success:hover {
-    background: linear-gradient(90deg, #00b894 0%, #0984e3 100%);
+    background: linear-gradient(90deg, var(--ftb-yellow) 0%, var(--ftb-green) 100%);
+    box-shadow: 0 4px 16px 0 #FFD10044;
 }
 .btn-danger {
-    background: linear-gradient(90deg, #d63031 0%, #e17055 100%);
-    border: none;
-    color: #fff;
+    background: linear-gradient(90deg, #D7263D 0%, #FFB400 100%);
+    color: var(--ftb-white);
 }
 .btn-danger:hover {
-    background: linear-gradient(90deg, #e17055 0%, #d63031 100%);
+    background: linear-gradient(90deg, #FFB400 0%, #D7263D 100%);
+    box-shadow: 0 4px 16px 0 #D7263D44;
 }
 .btn-secondary {
-    background: #636e72;
-    color: #fff;
-    border: none;
+    background: var(--ftb-navy);
+    color: var(--ftb-white);
 }
 .btn-secondary:hover {
-    background: #b2bec3;
-    color: #232526;
+    background: var(--ftb-yellow);
+    color: var(--ftb-dark);
 }
 
 #maze-canvas {
-    border-radius: 12px;
-    box-shadow: 0 2px 16px 0 rgba(0,0,0,0.18);
-    background: transparent; /* Changed from #000 to transparent to avoid black border */
+    border-radius: 18px;
+    box-shadow: 0 2px 24px 0 rgba(0,51,102,0.18);
+    background: transparent;
     margin-top: 1.5rem;
-    padding: 0; /* Remove padding to prevent extra space around the canvas */
+    padding: 0;
     display: block;
-    box-sizing: border-box; /* Use border-box for more predictable sizing */
+    box-sizing: border-box;
     margin-left: auto;
     margin-right: auto;
+    border: 2.5px solid var(--ftb-blue);
+    transition: box-shadow 0.2s;
+}
+#maze-canvas:focus {
+    outline: 2px solid var(--ftb-green);
 }
 
 #maze3d-modal {
-    background: rgba(20,20,30,0.98) !important;
+    background: rgba(0, 27, 52, 0.98) !important;
+    display: flex;
+    align-items: center !important;
+    justify-content: center !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 3000;
+    backdrop-filter: blur(8px) saturate(160%);
+}
+#maze3d-modal > #maze-3d-container {
+    width: 90vw;
+    height: 90vh;
+    margin: auto;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 18px;
+    box-shadow: 0 2px 24px 0 rgba(0,0,0,0.25);
+    background: var(--ftb-dark);
+}
+#maze3d-modal[style*="display: none"] {
+    display: none !important;
 }
 #close-3d-btn {
-    background: #232526 !important;
-    color: #fff !important;
-    border-radius: 8px;
+    background: var(--ftb-blue) !important;
+    color: var(--ftb-white) !important;
+    border-radius: 12px;
     border: none;
     font-size: 2rem;
     padding: 0 16px;
     top: 20px;
     right: 30px;
-    z-index: 10000;
+    z-index: 3100;
+    box-shadow: 0 2px 8px 0 rgba(0,0,0,0.18);
+    position: absolute;
 }
-#maze-3d-container {
-    border-radius: 16px;
-    box-shadow: 0 2px 24px 0 rgba(0,0,0,0.25);
-    background: #181a1b;
+
+/* Floating action button for 3D view */
+#view-3d-button {
+    /* Remove fixed/floating styles so it sits inline with other buttons */
+    position: static;
+    border-radius: 12px;
+    width: auto;
+    height: auto;
+    font-size: 1.13rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.10);
+    background: var(--ftb-navy);
+    color: var(--ftb-white);
+    border: none;
+    transition: box-shadow 0.2s, background 0.2s;
+}
+#view-3d-button[style*="display: none"] {
+    display: none !important;
+}
+#view-3d-button:focus {
+    outline: 2px solid var(--ftb-green);
+}
+#view-3d-button:hover {
+    background: linear-gradient(135deg, var(--ftb-green) 0%, var(--ftb-blue) 100%);
+    box-shadow: 0 8px 32px 0 #00336655;
+}
+
+/* Toast/snackbar for notifications */
+#toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ftb-blue);
+    color: var(--ftb-white);
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 16px 0 rgba(0,0,0,0.18);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    z-index: 2000;
+}
+#toast.show {
+    opacity: 1;
+    pointer-events: auto;
 }
 
 @media (max-width: 900px) {
@@ -135,4 +235,26 @@ label, .form-label {
         width: 100% !important;
         height: auto !important;
     }
+    #view-3d-button {
+        right: 16px;
+        bottom: 16px;
+        width: 52px;
+        height: 52px;
+        font-size: 1.5rem;
+    }
+    #maze3d-modal > #maze-3d-container {
+        width: 98vw;
+        height: 80vh;
+    }
+}
+
+/* Accessibility: focus outlines for all interactive elements */
+button:focus, .form-control:focus, .form-select:focus {
+    outline: 2px solid var(--ftb-green);
+    outline-offset: 2px;
+}
+
+/* Microinteractions */
+.btn, .form-control, .form-select {
+    transition: box-shadow 0.2s, border 0.2s, background 0.2s, color 0.2s;
 }

@@ -12,12 +12,15 @@ app.set('views', path.join(__dirname, 'views'));
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Increase JSON payload limit for large mazes
+app.use(express.json({ limit: '20mb' }));
+
 // Routes
 app.get('/', (req, res) => {
   res.render('index');
 });
 
-app.post('/generate-maze', express.json(), (req, res) => {
+app.post('/generate-maze', (req, res) => {
     const { algorithm, size } = req.body;
     try {
         const { maze, steps, start, end } = MazeGenerator.generateMaze(algorithm, parseInt(size, 10));
@@ -27,7 +30,7 @@ app.post('/generate-maze', express.json(), (req, res) => {
     }
 });
 
-app.post('/solve-maze', express.json(), (req, res) => {
+app.post('/solve-maze', (req, res) => {
     const { maze, start, end, algorithm } = req.body;
     let solutionSteps;
 

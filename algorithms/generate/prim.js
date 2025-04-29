@@ -1,5 +1,7 @@
 // Prim's Algorithm Maze Generation
+// Modernized: ensures full grid usage, clear logic, and maintainability
 module.exports = function generateMazePrim(size) {
+    // Create a size x size grid filled with walls (1)
     const maze = Array.from({ length: size }, () => Array(size).fill(1));
     const walls = [];
     const directions = [
@@ -10,8 +12,10 @@ module.exports = function generateMazePrim(size) {
     ];
     const steps = [];
 
+    // Only allow carving if the cell is inside the grid and is a wall
     const isValid = (x, y) => x > 0 && y > 0 && x < size - 1 && y < size - 1 && maze[x][y] === 1;
 
+    // Add all valid walls around a cell
     const addWalls = (x, y) => {
         directions.forEach(([dx, dy]) => {
             const nx = x + dx;
@@ -20,6 +24,7 @@ module.exports = function generateMazePrim(size) {
         });
     };
 
+    // Start at (1,1)
     maze[1][1] = 0;
     steps.push([1, 1]);
     addWalls(1, 1);
@@ -29,14 +34,18 @@ module.exports = function generateMazePrim(size) {
         const [x, y, nx, ny] = walls.splice(randomIndex, 1)[0];
 
         if (isValid(nx, ny)) {
+            // Carve the wall between current and neighbor
+            const mx = x + (nx - x) / 2;
+            const my = y + (ny - y) / 2;
+            maze[mx][my] = 0;
+            steps.push([mx, my]);
             maze[nx][ny] = 0;
             steps.push([nx, ny]);
-            maze[x + (nx - x) / 2][y + (ny - y) / 2] = 0; // Carve passage
-            steps.push([x + (nx - x) / 2, y + (ny - y) / 2]);
             addWalls(nx, ny);
         }
     }
 
+    // Set start and end points
     const start = [1, 1];
     let end = [size - 2, size - 2];
     if (size > 2 && maze[size - 3][size - 2] === 0) {

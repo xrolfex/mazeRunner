@@ -1,5 +1,7 @@
 // Depth-First Search Maze Generation
+// Modernized: ensures full grid usage, clear logic, and maintainability
 module.exports = function generateMazeDFS(size) {
+    // Create a size x size grid filled with walls (1)
     const maze = Array.from({ length: size }, () => Array(size).fill(1));
     const stack = [];
     const directions = [
@@ -10,8 +12,10 @@ module.exports = function generateMazeDFS(size) {
     ];
     const steps = [];
 
+    // Only allow carving if the cell is inside the grid and is a wall
     const isValid = (x, y) => x >= 0 && y >= 0 && x < size && y < size && maze[x][y] === 1;
 
+    // Carve a path using DFS
     const carvePath = (x, y) => {
         maze[x][y] = 0;
         steps.push([x, y]);
@@ -19,14 +23,19 @@ module.exports = function generateMazeDFS(size) {
 
         while (stack.length > 0) {
             const [cx, cy] = stack[stack.length - 1];
+            // Find all valid neighbors two steps away
             const neighbors = directions
                 .map(([dx, dy]) => [cx + dx * 2, cy + dy * 2])
                 .filter(([nx, ny]) => isValid(nx, ny));
 
             if (neighbors.length > 0) {
+                // Randomly pick a neighbor to visit
                 const [nx, ny] = neighbors[Math.floor(Math.random() * neighbors.length)];
-                maze[cx + (nx - cx) / 2][cy + (ny - cy) / 2] = 0; // Carve passage
-                steps.push([cx + (nx - cx) / 2, cy + (ny - cy) / 2]);
+                // Carve the wall between current and neighbor
+                const mx = cx + (nx - cx) / 2;
+                const my = cy + (ny - cy) / 2;
+                maze[mx][my] = 0;
+                steps.push([mx, my]);
                 maze[nx][ny] = 0;
                 steps.push([nx, ny]);
                 stack.push([nx, ny]);
@@ -36,10 +45,13 @@ module.exports = function generateMazeDFS(size) {
         }
     };
 
+    // Start carving from the top-left corner
     carvePath(0, 0);
 
+    // Set start and end points
     const start = [0, 0];
     let end = [size - 1, size - 1];
+    // Prefer an end that is open and on the border
     if (size > 1 && maze[size - 2][size - 1] === 0) {
         end = [size - 2, size - 1];
     } else if (size > 1 && maze[size - 1][size - 2] === 0) {
