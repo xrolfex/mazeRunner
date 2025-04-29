@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maze Generator</title>
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/style.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="row">
+    <div class="container mt-5 shadow-lg">
+        <div class="row g-4">
             <div class="col-md-6">
-                <h2>Maze Generation</h2>
+                <h2><i class="bi bi-grid-3x3-gap"></i> Maze Generation</h2>
                 <form id="maze-form">
                     <div class="mb-3">
                         <label for="algorithm" class="form-label">Select Generation Algorithm</label>
@@ -22,7 +24,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="size" class="form-label">Maze Size</label>
-                        <input type="number" class="form-control" id="size" name="size" value="100" placeholder="Enter maze size (e.g., 10)">
+                        <input type="number" class="form-control" id="size" name="size" value="20" placeholder="Enter maze size (e.g., 20)">
                     </div>
                     <div class="mb-3">
                         <label for="speed" class="form-label">Generation Speed (ms per step)</label>
@@ -31,7 +33,7 @@
                 </form>
             </div>
             <div class="col-md-6">
-                <h2>Maze Solving</h2>
+                <h2><i class="bi bi-lightning-charge"></i> Maze Solving</h2>
                 <form id="solve-form">
                     <div class="mb-3">
                         <label for="solve-algorithm" class="form-label">Select Solving Algorithm</label>
@@ -48,11 +50,12 @@
                 </form>
             </div>
         </div>
-        <div class="text-center mt-4 d-flex justify-content-center gap-2">
-            <button id="generate-button" class="btn btn-primary">Generate Maze</button>
-            <button id="solve-button" class="btn btn-success" style="display: none;">Solve Maze</button>
-            <button id="stop-button" class="btn btn-danger" style="display: none;">Stop</button>
-            <button id="view-3d-button" class="btn btn-secondary" style="display: none;">View in 3D</button>
+        <div class="text-center mt-4 d-flex justify-content-center gap-2 flex-wrap">
+            <button id="generate-button" class="btn btn-primary shadow">Generate Maze</button>
+            <button id="solve-button" class="btn btn-success shadow" style="display: none;">Solve Maze</button>
+            <button id="stop-button" class="btn btn-danger shadow" style="display: none;">Stop</button>
+            <button id="view-3d-button" class="btn btn-secondary shadow" style="display: none;">View in 3D</button>
+            <button id="toggle-grid-button" class="btn btn-secondary shadow">Show Grid</button>
         </div>
         <div class="text-center mt-4">
             <canvas id="maze-canvas" width="500" height="500" style="border:1px solid #000;"></canvas>
@@ -70,6 +73,7 @@
         let generatedMaze = null;
         let startPoint = null;
         let endPoint = null;
+        let showGrid = false;
 
         document.getElementById('generate-button').addEventListener('click', async (event) => {
             event.preventDefault();
@@ -77,6 +81,16 @@
             const algorithm = document.getElementById('algorithm').value;
             const size = document.getElementById('size').value;
             const speed = document.getElementById('speed').value;
+
+            // Always clear the canvas before generating a new maze
+            const canvas = document.getElementById('maze-canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Reset grid toggle state and button
+            showGrid = false;
+            const gridBtn = document.getElementById('toggle-grid-button');
+            if (gridBtn) gridBtn.textContent = 'Show Grid';
 
             // Clear any previous animations
             stopAnimation();
@@ -168,62 +182,128 @@
             document.getElementById('maze-3d-container').innerHTML = '';
         }
 
+        document.getElementById('toggle-grid-button').addEventListener('click', function() {
+            showGrid = !showGrid;
+            this.textContent = showGrid ? 'Hide Grid' : 'Show Grid';
+            redrawMazeWithGrid();
+        });
+
+        function redrawMazeWithGrid() {
+            if (!generatedMaze) return;
+            // Redraw the maze and grid
+            const canvas = document.getElementById('maze-canvas');
+            const ctx = canvas.getContext('2d');
+            const size = generatedMaze.length;
+            const cellSize = Math.floor(Math.min(canvas.width / size, canvas.height / size));
+            const offsetX = Math.floor((canvas.width - cellSize * size) / 2);
+            const offsetY = Math.floor((canvas.height - cellSize * size) / 2);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'black';
+            ctx.fillRect(offsetX, offsetY, cellSize * size, cellSize * size);
+            ctx.fillStyle = 'white';
+            for (let x = 0; x < size; x++) {
+                for (let y = 0; y < size; y++) {
+                    if (generatedMaze[x][y] === 0) {
+                        ctx.fillRect(offsetX + y * cellSize, offsetY + x * cellSize, cellSize, cellSize);
+                    }
+                }
+            }
+            ctx.fillStyle = 'green';
+            ctx.fillRect(offsetX + startPoint[1] * cellSize, offsetY + startPoint[0] * cellSize, cellSize, cellSize);
+            ctx.fillStyle = 'red';
+            ctx.fillRect(offsetX + endPoint[1] * cellSize, offsetY + endPoint[0] * cellSize, cellSize, cellSize);
+            if (showGrid) {
+                drawGridOverlay(size, cellSize, offsetX, offsetY);
+            }
+        }
+
+        function drawGridOverlay(size, cellSize, offsetX, offsetY) {
+            const canvas = document.getElementById('maze-canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.save();
+            ctx.strokeStyle = '#d3d3d3';
+            ctx.lineWidth = 1;
+            for (let i = 0; i <= size; i++) {
+                // Vertical lines
+                ctx.beginPath();
+                ctx.moveTo(offsetX + i * cellSize, offsetY);
+                ctx.lineTo(offsetX + i * cellSize, offsetY + size * cellSize);
+                ctx.stroke();
+                // Horizontal lines
+                ctx.beginPath();
+                ctx.moveTo(offsetX, offsetY + i * cellSize);
+                ctx.lineTo(offsetX + size * cellSize, offsetY + i * cellSize);
+                ctx.stroke();
+            }
+            ctx.restore();
+        }
+
         function animateMaze(maze, steps, size, speed, start, end) {
             const canvas = document.getElementById('maze-canvas');
             const ctx = canvas.getContext('2d');
-            const cellSize = canvas.width / size;
+            // Use Math.floor for cellSize, but ensure the maze fills the canvas exactly
+            const cellSize = Math.floor(Math.min(canvas.width / size, canvas.height / size));
+            // Adjust offsets so the maze is always flush to the left/top
+            const offsetX = Math.floor((canvas.width - cellSize * size) / 2);
+            const offsetY = Math.floor((canvas.height - cellSize * size) / 2);
 
-            // Show the stop button
-            document.getElementById('stop-button').style.display = 'block';
-
-            // Draw the initial maze grid
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Fill only the maze area with black background
             ctx.fillStyle = 'black';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // Remove the light gray path rendering during generation
-
-            // Draw the start and end points
-            ctx.fillStyle = 'green';
-            ctx.fillRect(start[1] * cellSize, start[0] * cellSize, cellSize, cellSize);
-            ctx.fillStyle = 'red';
-            ctx.fillRect(end[1] * cellSize, end[0] * cellSize, cellSize, cellSize);
+            ctx.fillRect(offsetX, offsetY, cellSize * size, cellSize * size);
 
             // Animate the maze generation
             ctx.fillStyle = 'white';
             steps.forEach(([x, y], index) => {
                 if (speed === '0') {
-                    // If speed is 0ms, draw all steps instantly
-                    ctx.fillRect(y * cellSize, x * cellSize, cellSize, cellSize);
+                    ctx.fillRect(offsetX + y * cellSize, offsetY + x * cellSize, cellSize, cellSize);
                 } else {
                     const timeout = setTimeout(() => {
-                        ctx.fillRect(y * cellSize, x * cellSize, cellSize, cellSize);
+                        ctx.fillRect(offsetX + y * cellSize, offsetY + x * cellSize, cellSize, cellSize);
                         if (index === steps.length - 1) {
-                            // Redraw the start and end points after the animation completes
                             ctx.fillStyle = 'green';
-                            ctx.fillRect(start[1] * cellSize, start[0] * cellSize, cellSize, cellSize);
+                            ctx.fillRect(offsetX + start[1] * cellSize, offsetY + start[0] * cellSize, cellSize, cellSize);
                             ctx.fillStyle = 'red';
-                            ctx.fillRect(end[1] * cellSize, end[0] * cellSize, cellSize, cellSize);
-
-                            // Hide the stop button
+                            ctx.fillRect(offsetX + end[1] * cellSize, offsetY + end[0] * cellSize, cellSize, cellSize);
                             document.getElementById('stop-button').style.display = 'none';
                         }
                     }, index * speed);
                     animationTimeouts.push(timeout);
                 }
             });
+            // Draw start and end points immediately for instant mode
+            if (speed === '0') {
+                ctx.fillStyle = 'green';
+                ctx.fillRect(offsetX + start[1] * cellSize, offsetY + start[0] * cellSize, cellSize, cellSize);
+                ctx.fillStyle = 'red';
+                ctx.fillRect(offsetX + end[1] * cellSize, offsetY + end[0] * cellSize, cellSize, cellSize);
+                document.getElementById('stop-button').style.display = 'none';
+            }
+            // After animation, if grid is enabled, draw it
+            if (showGrid) {
+                drawGridOverlay(size, cellSize, offsetX, offsetY);
+            }
         }
 
         function animateSolution(solutionSteps, solveSpeed) {
             const canvas = document.getElementById('maze-canvas');
             const ctx = canvas.getContext('2d');
-            const cellSize = canvas.width / generatedMaze[0].length;
+            const size = generatedMaze[0].length;
+            const cellSize = Math.floor(Math.min(canvas.width / size, canvas.height / size));
+            const offsetX = Math.floor((canvas.width - cellSize * size) / 2);
+            const offsetY = Math.floor((canvas.height - cellSize * size) / 2);
 
-            ctx.fillStyle = 'blue'; // Use blue to indicate the solution path
+            ctx.fillStyle = 'blue';
             solutionSteps.forEach(([x, y], index) => {
                 setTimeout(() => {
-                    ctx.fillRect(y * cellSize, x * cellSize, cellSize, cellSize);
+                    ctx.fillRect(offsetX + y * cellSize, offsetY + x * cellSize, cellSize, cellSize);
                 }, index * solveSpeed);
             });
+            // After animation, if grid is enabled, draw it
+            if (showGrid) {
+                drawGridOverlay(size, cellSize, offsetX, offsetY);
+            }
         }
 
         function stopAnimation() {
@@ -236,23 +316,29 @@
                 const canvas = document.getElementById('maze-canvas');
                 const ctx = canvas.getContext('2d');
                 const size = generatedMaze.length;
-                const cellSize = canvas.width / size;
-                // Draw all maze cells
+                const cellSize = Math.floor(Math.min(canvas.width / size, canvas.height / size));
+                const offsetX = Math.floor((canvas.width - cellSize * size) / 2);
+                const offsetY = Math.floor((canvas.height - cellSize * size) / 2);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = 'black';
+                ctx.fillRect(offsetX, offsetY, cellSize * size, cellSize * size);
                 ctx.fillStyle = 'white';
                 for (let x = 0; x < size; x++) {
                     for (let y = 0; y < size; y++) {
                         if (generatedMaze[x][y] === 0) {
-                            ctx.fillRect(y * cellSize, x * cellSize, cellSize, cellSize);
+                            ctx.fillRect(offsetX + y * cellSize, offsetY + x * cellSize, cellSize, cellSize);
                         }
                     }
                 }
-                // Redraw the start and end points
                 ctx.fillStyle = 'green';
-                ctx.fillRect(startPoint[1] * cellSize, startPoint[0] * cellSize, cellSize, cellSize);
+                ctx.fillRect(offsetX + startPoint[1] * cellSize, offsetY + startPoint[0] * cellSize, cellSize, cellSize);
                 ctx.fillStyle = 'red';
-                ctx.fillRect(endPoint[1] * cellSize, endPoint[0] * cellSize, cellSize, cellSize);
+                ctx.fillRect(offsetX + endPoint[1] * cellSize, offsetY + endPoint[0] * cellSize, cellSize, cellSize);
             }
-            // Hide the stop button
+            // After drawing, if grid is enabled, draw it
+            if (showGrid) {
+                drawGridOverlay(size, cellSize, offsetX, offsetY);
+            }
             document.getElementById('stop-button').style.display = 'none';
         }
     </script>

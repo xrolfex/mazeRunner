@@ -1,5 +1,10 @@
+/* Modern, streamlined UI for MazeRunner */
 body {
-    background-color: #f8f9fa;
+    background: linear-gradient(135deg, #232526 0%, #414345 100%);
+    min-height: 100vh;
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    color: #f5f6fa;
+    margin: 0;
 }
 
 #maze-output {
@@ -7,4 +12,127 @@ body {
     font-family: monospace;
     white-space: pre;
     margin-top: 20px;
+}
+
+.container {
+    background: rgba(34, 36, 40, 0.95);
+    border-radius: 18px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    padding: 2.5rem 2rem 2rem 2rem;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+    max-width: 900px;
+}
+
+h2 {
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    margin-bottom: 1.2rem;
+    color: #00b894;
+}
+
+label, .form-label {
+    color: #b2bec3;
+    font-weight: 500;
+}
+
+.form-control, .form-select {
+    background: #232526;
+    color: #f5f6fa;
+    border: 1px solid #636e72;
+    border-radius: 8px;
+    padding: 0.7rem 1rem;
+    margin-bottom: 0.5rem;
+    transition: border 0.2s;
+}
+.form-control:focus, .form-select:focus {
+    border-color: #00b894;
+    outline: none;
+}
+
+.btn {
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    padding: 0.7rem 2.2rem;
+    font-size: 1.1rem;
+    transition: background 0.2s, color 0.2s;
+}
+.btn-primary {
+    background: linear-gradient(90deg, #00b894 0%, #00cec9 100%);
+    border: none;
+    color: #fff;
+}
+.btn-primary:hover {
+    background: linear-gradient(90deg, #00cec9 0%, #00b894 100%);
+}
+.btn-success {
+    background: linear-gradient(90deg, #0984e3 0%, #00b894 100%);
+    border: none;
+    color: #fff;
+}
+.btn-success:hover {
+    background: linear-gradient(90deg, #00b894 0%, #0984e3 100%);
+}
+.btn-danger {
+    background: linear-gradient(90deg, #d63031 0%, #e17055 100%);
+    border: none;
+    color: #fff;
+}
+.btn-danger:hover {
+    background: linear-gradient(90deg, #e17055 0%, #d63031 100%);
+}
+.btn-secondary {
+    background: #636e72;
+    color: #fff;
+    border: none;
+}
+.btn-secondary:hover {
+    background: #b2bec3;
+    color: #232526;
+}
+
+#maze-canvas {
+    border-radius: 12px;
+    box-shadow: 0 2px 16px 0 rgba(0,0,0,0.18);
+    background: transparent; /* Changed from #000 to transparent to avoid black border */
+    margin-top: 1.5rem;
+    padding: 0; /* Remove padding to prevent extra space around the canvas */
+    display: block;
+    box-sizing: border-box; /* Use border-box for more predictable sizing */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#maze3d-modal {
+    background: rgba(20,20,30,0.98) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#close-3d-btn {
+    background: #232526 !important;
+    color: #fff !important;
+    border-radius: 8px;
+    border: none;
+    font-size: 2rem;
+    padding: 0 16px;
+    top: 20px;
+    right: 30px;
+    z-index: 10000;
+}
+#maze-3d-container {
+    border-radius: 16px;
+    box-shadow: 0 2px 24px 0 rgba(0,0,0,0.25);
+    background: #181a1b;
+}
+
+@media (max-width: 900px) {
+    .container {
+        padding: 1.2rem 0.5rem 1.5rem 0.5rem;
+    }
+    #maze-canvas {
+        width: 100% !important;
+        height: auto !important;
+    }
 }

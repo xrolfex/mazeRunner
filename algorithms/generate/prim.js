@@ -1,6 +1,5 @@
 // Prim's Algorithm Maze Generation
 module.exports = function generateMazePrim(size) {
-    // ...existing code...
     const maze = Array.from({ length: size }, () => Array(size).fill(1));
     const walls = [];
     const directions = [
@@ -40,35 +39,15 @@ module.exports = function generateMazePrim(size) {
 
     const start = [1, 1];
     let end = [size - 2, size - 2];
-
-    // Ensure the bottom-right corner is reachable
-    if (maze[size - 3][size - 2] === 0) {
+    if (size > 2 && maze[size - 3][size - 2] === 0) {
         end = [size - 3, size - 2];
-    } else if (maze[size - 2][size - 3] === 0) {
+    } else if (size > 2 && maze[size - 2][size - 3] === 0) {
         end = [size - 2, size - 3];
-    } else if (maze[size - 3][size - 3] === 0) {
+    } else if (size > 2 && maze[size - 3][size - 3] === 0) {
         end = [size - 3, size - 3];
     }
-
-    // Ensure the start and end points are open
     maze[start[0]][start[1]] = 0;
     maze[end[0]][end[1]] = 0;
     steps.push(start, end);
-
-    // Ensure the right and bottom edges are open
-    for (let i = 1; i < size - 1; i++) {
-        if (maze[size - 2][i] === 0) {
-            maze[size - 1][i] = 0;
-            break;
-        }
-    }
-    for (let i = 1; i < size - 1; i++) {
-        if (maze[i][size - 2] === 0) {
-            maze[i][size - 1] = 0;
-            break;
-        }
-    }
-
     return { maze, steps, start, end };
-    // ...existing code...
-};
+}
