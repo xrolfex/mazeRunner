@@ -13,9 +13,14 @@ module.exports = function generateMazeDFS(size) {
     const steps = [];
 
     // Only allow carving if the cell is inside the grid and is a wall
+    // size: The width/height of the maze (number of cells per side)
+    // stack: Used for DFS backtracking
+    // directions: [dx, dy] pairs for left, right, up, down
+    // steps: Animation steps for UI
     const isValid = (x, y) => x >= 0 && y >= 0 && x < size && y < size && maze[x][y] === 1;
 
     // Carve a path using DFS
+    // x, y: Current cell coordinates
     const carvePath = (x, y) => {
         maze[x][y] = 0;
         steps.push([x, y]);
@@ -49,6 +54,8 @@ module.exports = function generateMazeDFS(size) {
     carvePath(0, 0);
 
     // Set start and end points
+    // start: Always [0, 0] (top-left)
+    // end: Prefer a border cell in the bottom/right that is open
     const start = [0, 0];
     let end = [size - 1, size - 1];
     // Prefer an end that is open and on the border

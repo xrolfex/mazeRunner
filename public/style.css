@@ -18,6 +18,7 @@ body {
     color: var(--ftb-gray);
     margin: 0;
     letter-spacing: 0.01em;
+    padding-bottom: 80px; /* Ensure content is not hidden behind footer */
 }
 
 #maze-output {
@@ -246,6 +247,27 @@ label, .form-label {
         width: 98vw;
         height: 80vh;
     }
+    .maze-toolbar {
+        flex-direction: column;
+        padding: 0.5rem 0.5rem;
+    }
+    .maze-toolbar .container-fluid {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+    }
+    .maze-toolbar .d-flex.flex-row.gap-3.align-items-center.ms-auto {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+        width: 100%;
+        align-items: stretch !important;
+    }
+    .maze-toolbar form {
+        width: 100%;
+        justify-content: flex-start;
+    }
+    .maze-toolbar .form-label {
+        min-width: 60px;
+    }
 }
 
 /* Accessibility: focus outlines for all interactive elements */
@@ -257,4 +279,79 @@ button:focus, .form-control:focus, .form-select:focus {
 /* Microinteractions */
 .btn, .form-control, .form-select {
     transition: box-shadow 0.2s, border 0.2s, background 0.2s, color 0.2s;
+}
+
+.maze-toolbar {
+    background: linear-gradient(90deg, var(--ftb-dark) 0%, var(--ftb-blue) 100%);
+    color: var(--ftb-white);
+    padding: 0.5rem 1.5rem;
+    border-bottom: 2.5px solid var(--ftb-green);
+    box-shadow: 0 2px 12px 0 rgba(0,51,102,0.10);
+    z-index: 100;
+}
+.maze-toolbar .navbar-brand {
+    color: var(--ftb-green) !important;
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: 0.03em;
+}
+.maze-toolbar .form-label {
+    color: var(--ftb-yellow);
+    font-weight: 600;
+    font-size: 1.01rem;
+}
+.maze-toolbar .form-control,
+.maze-toolbar .form-select {
+    background: rgba(0, 27, 52, 0.85);
+    color: var(--ftb-white);
+    border: 1.5px solid var(--ftb-blue);
+    border-radius: 8px;
+    font-size: 1rem;
+    min-width: 60px;
+    box-shadow: none;
+    margin-bottom: 0;
+}
+.maze-toolbar .form-control:focus,
+.maze-toolbar .form-select:focus {
+    border-color: var(--ftb-green);
+    box-shadow: 0 0 0 2px #00A54F33;
+}
+
+@media (max-width: 900px) {
+    .maze-toolbar {
+        flex-direction: column;
+        padding: 0.5rem 0.5rem;
+    }
+    .maze-toolbar .navbar-brand {
+        font-size: 1.1rem;
+    }
+    .maze-toolbar .form-control,
+    .maze-toolbar .form-select {
+        font-size: 0.95rem;
+        min-width: 50px;
+    }
+}
+
+.maze-footer-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    background: linear-gradient(90deg, var(--ftb-dark) 0%, var(--ftb-blue) 100%);
+    border-top: 2.5px solid var(--ftb-green);
+    box-shadow: 0 -2px 12px 0 rgba(0,51,102,0.10);
+    padding: 0.7rem 1.5rem 0.7rem 1.5rem;
+    z-index: 2000;
+    gap: 1rem;
+}
+.maze-footer-bar .btn {
+    margin-bottom: 0;
+}
+@media (max-width: 900px) {
+    .maze-footer-bar {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.7rem 0.5rem;
+    }
 }
