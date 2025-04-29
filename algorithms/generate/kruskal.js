@@ -1,5 +1,35 @@
+/**
+ * algorithms/generate/kruskal.js
+ *
+ * Maze generation using Kruskal's algorithm.
+ *
+ * Exports:
+ *   generateMazeKruskal(size): Generates a size x size maze using Kruskal's algorithm.
+ *
+ * Returns:
+ *   { maze, steps, start, end }
+ *     maze: 2D array (0=open, 1=wall)
+ *     steps: Array of [x, y] for animation
+ *     start: Start cell coordinates
+ *     end: End cell coordinates
+ *
+ * Author: [Your Name or Team]
+ * Date: 2025-04-28
+ */
+
 // Kruskal's Algorithm Maze Generation
 // Modernized: ensures full grid usage, clear logic, and maintainability
+
+/**
+ * Generates a maze using Kruskal's algorithm.
+ *
+ * @param {number} size - The width/height of the maze (number of cells per side).
+ * @returns {{maze: number[][], steps: number[][], start: number[], end: number[]}}
+ *   maze: 2D array (0=open, 1=wall)
+ *   steps: Array of [x, y] for animation
+ *   start: Start cell coordinates
+ *   end: End cell coordinates
+ */
 module.exports = function generateMazeKruskal(size) {
     // Create a size x size grid filled with walls (1)
     const maze = Array.from({ length: size }, () => Array(size).fill(1));
@@ -13,7 +43,23 @@ module.exports = function generateMazeKruskal(size) {
     const steps = [];
 
     // Disjoint set helpers
+
+    /**
+     * Disjoint set find operation.
+     * @param {number[]} parent - Parent array
+     * @param {number} x - Node index
+     * @returns {number} Root of the set
+     */
     const find = (parent, x) => (parent[x] === x ? x : (parent[x] = find(parent, parent[x])));
+
+    /**
+     * Disjoint set union operation.
+     * @param {number[]} parent - Parent array
+     * @param {number[]} rank - Rank array
+     * @param {number} x - First node
+     * @param {number} y - Second node
+     * @returns {boolean} True if union was successful
+     */
     const union = (parent, rank, x, y) => {
         const rootX = find(parent, x);
         const rootY = find(parent, y);
@@ -31,6 +77,12 @@ module.exports = function generateMazeKruskal(size) {
         return false;
     };
 
+    /**
+     * Converts 2D cell coordinates to 1D index.
+     * @param {number} x - Row index
+     * @param {number} y - Column index
+     * @returns {number} 1D index
+     */
     const cellIndex = (x, y) => x * size + y;
     const parent = Array.from({ length: size * size }, (_, i) => i);
     const rank = Array(size * size).fill(0);

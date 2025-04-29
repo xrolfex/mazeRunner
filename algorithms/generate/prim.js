@@ -1,5 +1,35 @@
+/**
+ * algorithms/generate/prim.js
+ *
+ * Maze generation using Prim's algorithm.
+ *
+ * Exports:
+ *   generateMazePrim(size): Generates a size x size maze using Prim's algorithm.
+ *
+ * Returns:
+ *   { maze, steps, start, end }
+ *     maze: 2D array (0=open, 1=wall)
+ *     steps: Array of [x, y] for animation
+ *     start: Start cell coordinates
+ *     end: End cell coordinates
+ *
+ * Author: [Your Name or Team]
+ * Date: 2025-04-28
+ */
+
 // Prim's Algorithm Maze Generation
 // Modernized: ensures full grid usage, clear logic, and maintainability
+
+/**
+ * Generates a maze using Prim's algorithm.
+ *
+ * @param {number} size - The width/height of the maze (number of cells per side).
+ * @returns {{maze: number[][], steps: number[][], start: number[], end: number[]}}
+ *   maze: 2D array (0=open, 1=wall)
+ *   steps: Array of [x, y] for animation
+ *   start: Start cell coordinates
+ *   end: End cell coordinates
+ */
 module.exports = function generateMazePrim(size) {
     // Create a size x size grid filled with walls (1)
     const maze = Array.from({ length: size }, () => Array(size).fill(1));
@@ -12,10 +42,19 @@ module.exports = function generateMazePrim(size) {
     ];
     const steps = [];
 
-    // Only allow carving if the cell is inside the grid and is a wall
+    /**
+     * Checks if a cell is within bounds and is a wall.
+     * @param {number} x - Row index
+     * @param {number} y - Column index
+     * @returns {boolean} True if cell is valid for carving
+     */
     const isValid = (x, y) => x > 0 && y > 0 && x < size - 1 && y < size - 1 && maze[x][y] === 1;
 
-    // Add all valid walls around a cell
+    /**
+     * Adds all valid walls around a cell to the wall list.
+     * @param {number} x - Row index
+     * @param {number} y - Column index
+     */
     const addWalls = (x, y) => {
         directions.forEach(([dx, dy]) => {
             const nx = x + dx;

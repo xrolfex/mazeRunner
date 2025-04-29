@@ -1,6 +1,27 @@
-// A* Search Maze Solver
+/**
+ * algorithms/solve/astar.js
+ *
+ * Maze solving using A* Search algorithm.
+ *
+ * Exports:
+ *   solveMazeAStar(maze, start, end): Solves the maze using A* Search.
+ *
+ * Returns:
+ *   solutionSteps: Array of [x, y] steps from start to end (if found)
+ *
+ * Author: [Your Name or Team]
+ * Date: 2025-04-28
+ */
+
+/**
+ * Solves a maze using A* Search algorithm.
+ *
+ * @param {number[][]} maze - 2D maze array (0=open, 1=wall)
+ * @param {number[]} start - [row, col] start cell
+ * @param {number[]} end - [row, col] end cell
+ * @returns {number[][]} solutionSteps - Array of [x, y] steps from start to end (if found)
+ */
 module.exports = function solveMazeAStar(maze, start, end) {
-    // ...existing code...
     const openSet = [start];
     const cameFrom = new Map();
     const gScore = new Map();
@@ -52,5 +73,4 @@ module.exports = function solveMazeAStar(maze, start, end) {
     }
 
     return []; // No solution found
-    // ...existing code...
 };

@@ -1,6 +1,28 @@
+/**
+ * algorithms/solve/bfs.js
+ *
+ * Maze solving using Breadth-First Search (BFS) algorithm.
+ *
+ * Exports:
+ *   solveMazeBFS(maze, start, end): Solves the maze using BFS.
+ *
+ * Returns:
+ *   solutionSteps: Array of [x, y] steps from start to end (if found)
+ *
+ * Author: [Your Name or Team]
+ * Date: 2025-04-28
+ */
+
 // Breadth-First Search Maze Solver
+/**
+ * Solves a maze using Breadth-First Search (BFS).
+ *
+ * @param {number[][]} maze - 2D maze array (0=open, 1=wall)
+ * @param {number[]} start - [row, col] start cell
+ * @param {number[]} end - [row, col] end cell
+ * @returns {number[][]} solutionSteps - Array of [x, y] steps from start to end (if found)
+ */
 module.exports = function solveMazeBFS(maze, start, end) {
-    // ...existing code...
     const queue = [start];
     const visited = new Set();
     const solutionSteps = [];
@@ -35,5 +57,4 @@ module.exports = function solveMazeBFS(maze, start, end) {
     }
 
     return []; // No solution found
-    // ...existing code...
 };

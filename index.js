@@ -1,7 +1,36 @@
+/**
+ * index.js
+ *
+ * Express server for the MazeRunner web application.
+ *
+ * Responsibilities:
+ * - Serves static files and EJS views
+ * - Handles maze generation and solving API endpoints
+ * - Increases JSON payload limit for large mazes
+ *
+ * Endpoints:
+ *   GET  /            - Render main UI
+ *   POST /generate-maze - Generate a maze with selected algorithm and size
+ *   POST /solve-maze    - Solve a maze with selected algorithm
+ *
+ * Author: [Your Name or Team]
+ * Date: 2025-04-28
+ */
+
+/**
+ * Main entry point for the MazeRunner Express server.
+ *
+ * @module index
+ */
+
 const express = require('express');
 const path = require('path');
 const MazeGenerator = require('./mazeGenerator');
 
+/**
+ * Express app instance.
+ * @type {import('express').Express}
+ */
 const app = express();
 const PORT = 3000;
 
@@ -20,6 +49,13 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
+/**
+ * Maze generation endpoint.
+ * @route POST /generate-maze
+ * @param {string} algorithm - Algorithm name
+ * @param {number} size - Maze size
+ * @returns {object} Maze data
+ */
 app.post('/generate-maze', (req, res) => {
     const { algorithm, size } = req.body;
     try {
@@ -30,6 +66,15 @@ app.post('/generate-maze', (req, res) => {
     }
 });
 
+/**
+ * Maze solving endpoint.
+ * @route POST /solve-maze
+ * @param {number[][]} maze - Maze array
+ * @param {number[]} start - Start cell
+ * @param {number[]} end - End cell
+ * @param {string} algorithm - Algorithm name
+ * @returns {object} Solution steps
+ */
 app.post('/solve-maze', (req, res) => {
     const { maze, start, end, algorithm } = req.body;
     let solutionSteps;

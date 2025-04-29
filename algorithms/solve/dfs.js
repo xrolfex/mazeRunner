@@ -1,6 +1,28 @@
+/**
+ * algorithms/solve/dfs.js
+ *
+ * Maze solving using Depth-First Search (DFS) algorithm.
+ *
+ * Exports:
+ *   solveMazeDFS(maze, start, end): Solves the maze using DFS.
+ *
+ * Returns:
+ *   solutionSteps: Array of [x, y] steps from start to end (if found)
+ *
+ * Author: [Your Name or Team]
+ * Date: 2025-04-28
+ */
+
 // Depth-First Search Maze Solver
+/**
+ * Solves a maze using Depth-First Search (DFS).
+ *
+ * @param {number[][]} maze - 2D maze array (0=open, 1=wall)
+ * @param {number[]} start - [row, col] start cell
+ * @param {number[]} end - [row, col] end cell
+ * @returns {number[][]} solutionSteps - Array of [x, y] steps from start to end (if found)
+ */
 module.exports = function solveMazeDFS(maze, start, end) {
-    // ...existing code...
     const stack = [start];
     const visited = new Set();
     const solutionSteps = [];
@@ -36,5 +58,4 @@ module.exports = function solveMazeDFS(maze, start, end) {
     }
 
     return []; // No solution found
-    // ...existing code...
 };

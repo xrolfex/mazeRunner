@@ -1,3 +1,20 @@
+/**
+ * maze3d.js
+ *
+ * Handles 3D rendering and first-person navigation of the maze using Three.js.
+ *
+ * Exposes renderMaze3D(maze, start, end) and disposeMaze3D() to the window.
+ *
+ * Features:
+ * - Renders maze walls, floor, start/end markers in 3D
+ * - First-person camera controls (arrow keys, WASD look, pointer lock)
+ * - Responsive resizing and pointer lock overlay
+ * - Finish popup when player reaches the end
+ *
+ * Author: [Your Name or Team]
+ * Date: 2025-04-28
+ */
+
 // public/maze3d.js
 // This script renders the maze in 3D using Three.js and allows first-person navigation with arrow keys.
 
@@ -14,6 +31,15 @@ let animationId = null;
 let pointerLockOverlay = null;
 let keysDown = {};
 
+/**
+ * Handles 3D rendering and navigation for the maze using Three.js.
+ *
+ * @function renderMaze3D
+ * @param {number[][]} maze - 2D maze array
+ * @param {number[]} start - Start cell [row, col]
+ * @param {number[]} end - End cell [row, col]
+ * @global
+ */
 function renderMaze3D(maze, startPoint, endPoint) {
     mazeData = maze;
     start = startPoint;
@@ -276,6 +302,11 @@ function onPointerLockChange() {
     }
 }
 
+/**
+ * Disposes the 3D maze renderer and event listeners.
+ * @function disposeMaze3D
+ * @global
+ */
 function disposeMaze3D() {
     if (animationId) cancelAnimationFrame(animationId);
     window.removeEventListener('keydown', onKeyDown);

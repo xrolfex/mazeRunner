@@ -1,3 +1,30 @@
+/*
+ * style.css
+ *
+ * Fifth Third Bank MazeRunner Web Application Stylesheet
+ *
+ * This file contains all styles for the MazeRunner web application, including:
+ * - Fifth Third Bank brand color palette (CSS variables)
+ * - Modern glassmorphism and minimal UI
+ * - Responsive layout for desktop and mobile
+ * - Toolbar, footer bar, and button styling
+ * - Maze canvas and placeholder box styling
+ * - Accessibility and microinteraction enhancements
+ *
+ * Author: [Your Name or Team]
+ * Date: 2025-04-28
+ *
+ * Key Sections:
+ *   :root                - Brand color variables
+ *   body, .container     - Layout and backgrounds
+ *   .maze-toolbar        - Header toolbar
+ *   .maze-footer-bar     - Fixed footer with controls
+ *   #maze-canvas         - Maze rendering area
+ *   #maze-placeholder    - Placeholder before maze is generated
+ *   Buttons, forms       - UI controls
+ *   Media queries        - Responsive adjustments
+ */
+
 /* Modern, glassmorphism, and minimal UI for MazeRunner */
 /* Fifth Third Bank Brand Colors */
 :root {
