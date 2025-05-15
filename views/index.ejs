@@ -62,6 +62,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.js"></script>
     <script src="/maze3d.js"></script>
     <script>
+        // Always initialize these globals for robustness
+        window.optimalPath = [];
+        window.solutionPathToShow = [];
         let animationTimeouts = [];
         let generatedMaze = null;
         let startPoint = null;
@@ -69,6 +72,9 @@
         let showGrid = false;
 
         document.getElementById('generate-button').addEventListener('click', async (event) => {
+            // Clear any previous solution path for 3D view
+            window.optimalPath = [];
+            window.solutionPathToShow = [];
             event.preventDefault();
 
             const algorithm = document.getElementById('algorithm').value;
@@ -149,6 +155,11 @@
 
                 const data = await response.json();
                 const { solutionSteps, optimalPath } = data;
+                // Always assign as array, never undefined/null
+                console.log('solve response optimalPath:', optimalPath);
+                window.optimalPath = Array.isArray(optimalPath) && optimalPath.length > 0 ? optimalPath : [];
+                window.solutionPathToShow = window.optimalPath;
+                console.log('window.optimalPath after solve:', window.optimalPath);
                 animateSolution(solutionSteps, solveSpeed);
             } catch (error) {
                 alert(error.message);
@@ -160,6 +171,9 @@
                 alert('Maze not generated yet!');
                 return;
             }
+            // Debug: log the solution path before opening 3D view
+            console.log('window.optimalPath before 3D view:', window.optimalPath);
+            // No need to set window.solutionPathToShow here; it's always kept up to date after solving
             // Show modal overlay and render 3D maze
             const modal = document.getElementById('maze3d-modal');
             modal.style.display = 'flex';
@@ -168,7 +182,12 @@
         });
         document.getElementById('close-3d-btn').addEventListener('click', close3DModal);
         document.addEventListener('keydown', function(e) {
-            if (document.getElementById('maze3d-modal').style.display === 'flex' && e.key === 'Escape') {
+            const modal = document.getElementById('maze3d-modal');
+            if (
+                modal.style.display === 'flex' &&
+                e.key === 'Escape' &&
+                document.pointerLockElement == null // Only close if pointer lock is not active
+            ) {
                 close3DModal();
             }
         });

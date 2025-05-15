@@ -79,23 +79,53 @@ app.post('/generate-maze', (req, res) => {
  */
 app.post('/solve-maze', (req, res) => {
     const { maze, start, end, algorithm } = req.body;
-    let solutionSteps;
+    let solutionSteps = [], optimalPath = [];
+    console.log('--- /solve-maze called ---');
+    console.log('Request body:', JSON.stringify(req.body));
     try {
+        let result;
         switch (algorithm) {
-            case 'dfs':
-                solutionSteps = MazeGenerator.solveMazeDFS(maze, start, end);
+            case 'dfs': {
+                result = MazeGenerator.solveMazeDFS(maze, start, end);
+                console.log('DFS result:', JSON.stringify(result));
+                if (result && typeof result === 'object' && Array.isArray(result.solutionSteps) && Array.isArray(result.optimalPath)) {
+                    solutionSteps = result.solutionSteps;
+                    optimalPath = result.optimalPath;
+                } else if (Array.isArray(result)) {
+                    solutionSteps = result;
+                    optimalPath = result;
+                }
                 break;
-            case 'bfs':
-                solutionSteps = MazeGenerator.solveMazeBFS(maze, start, end);
+            }
+            case 'bfs': {
+                result = MazeGenerator.solveMazeBFS(maze, start, end);
+                console.log('BFS result:', JSON.stringify(result));
+                if (result && typeof result === 'object') {
+                    solutionSteps = Array.isArray(result.solutionSteps) ? result.solutionSteps : [];
+                    optimalPath = Array.isArray(result.optimalPath) ? result.optimalPath : [];
+                }
                 break;
-            case 'astar':
-                solutionSteps = MazeGenerator.solveMazeAStar(maze, start, end);
+            }
+            case 'astar': {
+                result = MazeGenerator.solveMazeAStar(maze, start, end);
+                console.log('A* result:', JSON.stringify(result));
+                if (result && typeof result === 'object' && Array.isArray(result.solutionSteps) && Array.isArray(result.optimalPath)) {
+                    solutionSteps = result.solutionSteps;
+                    optimalPath = result.optimalPath;
+                } else if (Array.isArray(result)) {
+                    solutionSteps = result;
+                    optimalPath = result;
+                }
                 break;
+            }
             default:
                 throw new Error('Unknown solving algorithm');
         }
-        res.json({ solutionSteps });
+        console.log('Final solutionSteps:', JSON.stringify(solutionSteps));
+        console.log('Final optimalPath:', JSON.stringify(optimalPath));
+        res.json({ solutionSteps, optimalPath });
     } catch (error) {
+        console.error('Error in /solve-maze:', error);
         res.status(400).json({ error: error.message });
     }
 });

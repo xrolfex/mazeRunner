@@ -17,6 +17,13 @@
     window.addEventListener('message', (event) => {
         if (event.data && event.data.type === 'maze-data') {
             renderMaze3D(event.data.maze, event.data.start, event.data.end);
+            // If a solution path is provided, render it after the maze is ready
+            if (event.data.solutionPath && Array.isArray(event.data.solutionPath)) {
+                // Wait a tick to ensure scene is ready
+                setTimeout(() => {
+                    renderSolutionPath(event.data.solutionPath);
+                }, 0);
+            }
         }
     }, { once: true });
     // Optionally, notify opener that popup is ready
